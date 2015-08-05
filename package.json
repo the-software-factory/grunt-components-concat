@@ -1,0 +1,17 @@
+{
+  "name": "grunt-components-concat",
+  "description": "Concatenates files with the same name",
+  "version": "0.0.0",
+  "author": {
+    "name": "Andrea Stronati",
+    "email": "astronati@vendini.com"
+  },
+  "contributors": {
+    "name": "",
+    "email": ""
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": []
+}
