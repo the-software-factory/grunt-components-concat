@@ -20,7 +20,8 @@
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-jshint": "^0.9.2",
     "grunt-contrib-nodeunit": "^0.3.3",
-    "grunt-contrib-uglify": "^0.9.1"
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-log-headers": "^1.0.1"
   },
   "keywords": []
 }

@@ -2,6 +2,7 @@
 
 var path = require('path');
 
+
 module.exports = function(grunt) {
     grunt.registerMultiTask('components_concat', 'Concatenates files with the same name', function () {
 
@@ -10,10 +11,15 @@ module.exports = function(grunt) {
         grunt.loadNpmTasks("grunt-contrib-uglify");
         grunt.loadNpmTasks("grunt-contrib-cssmin");
 
+        // Needed to suppress the logging of the task headers if no debugging messages are requires
+        require('grunt-log-headers')(grunt);
+
         // Gets configuration properties
         var _srcFolder = this.data.src;
+        var _excludePaths = (!Array.isArray(this.data.exclude)) ? [] : this.data.exclude;
         var _destFolders = this.data.dest;
-        var _minify = (typeof this.data.minify === "undefined") ? false : this.data.minify;
+        var _minify = (typeof this.data.minify !== "boolean") ? false : this.data.minify;
+        var _debugInfo = (typeof this.data.debugInfo !== "boolean") ? false : this.data.debugInfo;
 
         // Controls if configuration options are valid
 
@@ -28,7 +34,7 @@ module.exports = function(grunt) {
         }
 
         if (typeof _destFolders !== "string" &&
-                typeof _destFolders !== "object") {
+                !Array.isArray(_destFolders)) {
             grunt.log.error("dest option is invalid");
             grunt.fail.fatal("can't run the task due to a fatal error");
         }
@@ -59,6 +65,22 @@ module.exports = function(grunt) {
         // Gets the list of all the files inside the source folder
         var _srcFiles = grunt.file.expand(_srcFolder + "/**/*");
 
+        // Holds files to exclude
+        var _excludeFiles = [];
+
+        // Gets the list of all the files to exclude for each path specified
+        _excludePaths.forEach(function(path) {
+            _excludeFiles = _excludeFiles.concat(grunt.file.expand(path));
+        });
+
+        // Removes files to exclude form the source files list
+        _srcFiles = _srcFiles.filter(function(file) {
+            if (_excludeFiles.indexOf(file) >= 0) {
+                return false;
+            }
+            else return true;
+        });
+
         /**
          * Files map by file name, as follows:
          * {
@@ -74,11 +96,11 @@ module.exports = function(grunt) {
 
         // Fills the source files map
         _srcFiles.forEach(function(file) {
-            // Gets te file name with extension from the path string
-            var filename = path.basename(file);
-
             // If the path is a file, than insert it in the map
             if (grunt.file.isFile(file)) {
+                // Gets the file name with extension from the path string
+                var filename = path.basename(file);
+
                 if (typeof _srcFilesMap[filename] === "undefined") {
                     _srcFilesMap[filename] = [];
                 }
@@ -86,7 +108,6 @@ module.exports = function(grunt) {
                 _srcFilesMap[filename].push(file);
             }
         });
-
 
         /**
          * Files map by file extension, as follows:
@@ -164,6 +185,9 @@ module.exports = function(grunt) {
                 // Add targets for grunt-contrib-concat plugin to concatenate files with the same name
                 grunt.config.set("concat." + filenameUnderscore + ".src", _filesByExtension[fileext][sameNameFiles]);
                 grunt.config.set("concat." + filenameUnderscore + ".dest", destFolder + "/" + filename);
+                if (!_debugInfo) {
+                    grunt.config.set("concat." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                }
                 // Add concat target to the list
                 tasks.concat.push("concat:" + filenameUnderscore);
 
@@ -179,10 +203,20 @@ module.exports = function(grunt) {
 
                         if (fileext === "js") {
                             grunt.config.set("uglify." + filenameUnderscore + ".files", file);
+
+                            if (!_debugInfo) {
+                                grunt.config.set("uglify." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                            }
+
                             tasks.uglify.push("uglify:" + filenameUnderscore);
                         }
                         else {
                             grunt.config.set("cssmin." + filenameUnderscore + ".files", file);
+
+                            if (!_debugInfo) {
+                                grunt.config.set("cssmin." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                            }
+
                             tasks.cssmin.push("cssmin:" + filenameUnderscore);
                         }
                     }
@@ -194,8 +228,6 @@ module.exports = function(grunt) {
         for(var task in tasks) {
             tasks[task].forEach(function(taskAndTarget) {
                 grunt.task.run(taskAndTarget);
-
-                console.log(taskAndTarget);
             });
         }
     });

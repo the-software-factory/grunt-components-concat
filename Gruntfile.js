@@ -21,18 +21,21 @@ module.exports = function(grunt) {
     components_concat: {
       target: {
         src: "test/fixtures",
-
-        dest: "build",
-
+        dest: "build"
+      },
 /*
-        dest: [
-          {"js": "build/js_output"},
-          {"css": "build/css_output"},
-          {"txt": "build/txt_output"}
-        ],
+        anotherTarget: {
+            src: "test/fixtures",
+            dest: [
+                {"js": "build/js_output"},
+                {"css": "build/css_output"},
+                {"txt": "build/txt_output"}
+            ],
+            exclude: ["test/fixtures/text/*.txt"],
+            minify: true,
+            debugInfo: false
+        },
 */
-        minify: true
-      }
     },
 
     nodeunit: {
