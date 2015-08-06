@@ -1,7 +1,7 @@
 {
   "name": "grunt-components-concat",
   "description": "Concatenates files with the same name",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Andrea Stronati",
     "email": "astronati@vendini.com"
@@ -18,7 +18,7 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-jshint": "^0.9.2",
-    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt-contrib-nodeunit": "^0.3.3"
   },
   "keywords": []
 }
