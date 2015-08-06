@@ -9,7 +9,6 @@ module.exports = function(grunt) {
         grunt.loadNpmTasks("grunt-contrib-concat");
         grunt.loadNpmTasks("grunt-contrib-uglify");
         grunt.loadNpmTasks("grunt-contrib-cssmin");
-        grunt.loadNpmTasks("grunt-contrib-clean");
 
         // Gets configuration properties
         var _srcFolder = this.data.src;
@@ -118,6 +117,13 @@ module.exports = function(grunt) {
 
         // Sets Grunt tasks
 
+        // List of tasks and targets to run
+        var tasks = {
+            concat: [],
+            uglify: [],
+            cssmin: []
+        };
+
         // Loops through arrays of arrays of files with same name by extension
         for (var fileext in _filesByExtension) {
 
@@ -128,8 +134,12 @@ module.exports = function(grunt) {
                 var filenameUnderscore = filename.replace(".", "_");
                 var fileExtension = filename.split(".")[1];
 
+
+
                 // Relative path to the output folder
                 var destFolder = null;
+
+
 
                 // Add an "ext" folder suffix to the destination folder if _destFolders is a string
                 if (typeof _destFolders === "string") {
@@ -154,6 +164,8 @@ module.exports = function(grunt) {
                 // Add targets for grunt-contrib-concat plugin to concatenate files with the same name
                 grunt.config.set("concat." + filenameUnderscore + ".src", _filesByExtension[fileext][sameNameFiles]);
                 grunt.config.set("concat." + filenameUnderscore + ".dest", destFolder + "/" + filename);
+                // Add concat target to the list
+                tasks.concat.push("concat:" + filenameUnderscore);
 
                 // Minify concatenated files if requested
                 if (_minify) {
@@ -167,25 +179,24 @@ module.exports = function(grunt) {
 
                         if (fileext === "js") {
                             grunt.config.set("uglify." + filenameUnderscore + ".files", file);
+                            tasks.uglify.push("uglify:" + filenameUnderscore);
                         }
                         else {
                             grunt.config.set("cssmin." + filenameUnderscore + ".files", file);
+                            tasks.cssmin.push("cssmin:" + filenameUnderscore);
                         }
-
-                        // Remove non-minified files
-                        grunt.config.set("clean." + filenameUnderscore, destFolder + "/" + filename);
                     }
                 }
             }
         }
-        
-        grunt.task.run("concat");
 
-        if (_minify) {
-            grunt.task.run("uglify");
-            grunt.task.run("cssmin");
-            grunt.task.run("clean");
+        // Runs the tasks in order defined and removes them from the global Grunt configuration
+        for(var task in tasks) {
+            tasks[task].forEach(function(taskAndTarget) {
+                grunt.task.run(taskAndTarget);
+
+                console.log(taskAndTarget);
+            });
         }
-
     });
 };

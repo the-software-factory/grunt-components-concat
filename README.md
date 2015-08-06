@@ -17,70 +17,62 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-components-concat');
 ```
 
-## The "components_concat" task
+## The "components_concat" task overview
+The "components_concat" task concatenates all the files with the same name inside a source folder and puts the concatenated versions  in the destination folder.
+The "src" target option is mandatory and it's a path to the source folder
+The "dest" target
+The concatenation may be optionally followed by the minification (for CSS files) and uglification (for the JS files).
 
-### Overview
-In your project's Gruntfile, add a section named `components_concat` to the data object passed into `grunt.initConfig()`.
+## The "components_concat" target options
+#### target.src
+* Type: `String`
+* Mandatory: `YES`
+* Description: It's a path to the source folder which files you want to concatenate
 
-```js
-grunt.initConfig({
-  components_concat: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
-});
+#### target.dest
+* Type: `String` or `Array`
+* Mandatory: `YES`
+** If `dest` is a string, than the output directory for the files with the same extension will be `dest` / `ext` / 
+** If `dest` is an array, it maps the file extension to custom output folder; it must be built as follows:
+```
+      [
+        { "txt" : "text_folder" },
+        { "js" : "scripts/js" },
+        { "css" : "output/styles/css" },
+        ...
+      ]
 ```
 
-### Options
+#### target.minify
+Type: `Boolean`
+Mandatory: `NO`
+Default: `FALSE`
+If it's `TRUE` than the minified versions will be also produced for the JS and CSS files.
+The CSS files gets minified and the JS ones get uglified.
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
-
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
 
 ### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+####
+In this example only mandatory options are specified.
+The concatenated (and eventually minified) files will be put into the custom folders.
+The target.minify will take the default `FALSE` value.
 
 ```js
 grunt.initConfig({
   components_concat: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+    target: {
+      src: "test/fixtures",
+      dest: [
+        {"js": "build/js_output"},
+        {"css": "build/css_output"},
+        {"txt": "build/txt_output"}
+      ]
     },
   },
 });
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
 
-```js
-grunt.initConfig({
-  components_concat: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).

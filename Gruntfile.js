@@ -13,16 +13,16 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc'
       }
     },
-/*
+
     clean: {
       tests: ['build']
     },
-*/
+
     components_concat: {
       target: {
         src: "test/fixtures",
 
-        dest: "output",
+        dest: "build",
 
 /*
         dest: [
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
           {"txt": "build/txt_output"}
         ],
 */
-        minify: false
+        minify: true
       }
     },
 
