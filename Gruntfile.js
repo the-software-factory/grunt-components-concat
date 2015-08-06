@@ -1,45 +1,40 @@
-/*
- * grunt-components-concat
- * https://github.com/alexeiliulin/plugin
- *
- * Copyright (c) 2015 Aleksey Alekseevich Lyulin
- * Licensed under the MIT license.
- */
-
 'use strict';
 
 module.exports = function(grunt) {
 
-  // Project configuration.
   grunt.initConfig({
     jshint: {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
-        '<%= nodeunit.tests %>'
+        'test/*_test.js'
       ],
       options: {
         jshintrc: '.jshintrc'
       }
     },
-    // Before generating any new files, remove any previously-created files.
+
     clean: {
       tests: ['build']
     },
-    // Configuration to be run (and then tested).
+
     components_concat: {
-      default_options: {
-        options: {
-        },
-        js: {
-          'build/js': 'test/fixtures/js'
-        },
-        css: {
-          'build/css': 'test/fixtures/css'
-        }
+      target: {
+        src: "test/fixtures",
+
+        dest: "output",
+
+/*
+        dest: [
+          {"js": "foo/"},
+          {"css": "bar/"},
+          {"txt": "asd/"}
+        ],
+*/
+        minify: false
       }
     },
-    // Unit tests.
+
     nodeunit: {
       test: ['test/*_test.js']
     }
@@ -53,7 +48,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
+  grunt.loadNpmTasks("grunt-contrib-uglify");
 
-  grunt.registerTask("test", ['clean', 'components_concat', 'nodeunit']);
+  grunt.registerTask("test", ['clean', 'jshint', 'components_concat', 'nodeunit']);
   grunt.registerTask('default', ['test']);
 };

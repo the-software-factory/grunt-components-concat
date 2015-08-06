@@ -1,1 +1,0 @@
-//from js/js1/script1.js
