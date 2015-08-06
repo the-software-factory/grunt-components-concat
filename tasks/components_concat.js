@@ -116,8 +116,6 @@ module.exports = function(grunt) {
             _filesByExtension[fileExtension].push(_srcFilesMap[filename]);
         }
 
-
-
         // Sets Grunt tasks
 
         // Loops through arrays of arrays of files with same name by extension
@@ -165,6 +163,8 @@ module.exports = function(grunt) {
                         var input = destFolder + "/" + filename;
                         var file = {};
 
+                        file[output] = input;
+
                         if (fileext === "js") {
                             grunt.config.set("uglify." + filenameUnderscore + ".files", file);
                         }
@@ -178,7 +178,7 @@ module.exports = function(grunt) {
                 }
             }
         }
-
+        
         grunt.task.run("concat");
 
         if (_minify) {
