@@ -265,5 +265,19 @@ module.exports = function(grunt) {
                 grunt.task.run(taskAndTarget);
             });
         }
+
+        // Removes the targets inserted by the plugin
+        grunt.registerTask("components_concat_config_cleanup", function() {
+            for(var task in tasks) {
+                tasks[task].forEach(function(taskAndTarget) {
+                    var task = taskAndTarget.split(":")[0];
+                    var target = taskAndTarget.split(":")[1];
+
+                    delete grunt.config.data[task][target];
+                });
+            }
+        });
+
+        grunt.task.run("components_concat_config_cleanup");
     });
 };

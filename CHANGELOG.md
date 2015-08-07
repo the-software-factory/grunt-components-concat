@@ -1,3 +1,6 @@
+##### ce96d67 Fri, 7 Aug 2015 15:27:02 +0200 
+ ###### Skip empty output files option added; bold escape sequence fixed 
+ 
 ##### ef7801b Fri, 7 Aug 2015 14:20:46 +0200 
  ###### Merge branch 'master' of https://github.com/the-software-factory/grunt-components-concat 
  
