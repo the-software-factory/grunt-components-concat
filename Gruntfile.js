@@ -55,6 +55,12 @@ module.exports = function(grunt) {
             src: "test/fixtures",
             dest: "minifyOptionOutput",
             minify: true
+        },
+
+        skipEmptyFilesOutput: {
+            src: "test/fixtures",
+            dest: "noEmptyOptionOutput",
+            skipEmpty: true
         }
     },
 

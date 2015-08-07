@@ -57,5 +57,18 @@ exports.components_concat = {
         test.equal(jsMatch.same && cssMatch.same && txtMatch.same, true,
             "The result of plugin run with minify option must match the expected one");
         test.done();
+    },
+
+    skipEmptyOptionTest: function(test) {
+        test.expect(1);
+
+        var jsMatch = dirCompare.compareSync("noEmptyOptionOutput/js/", "test/expected/js/", { compareContent: true });
+        var cssMatch = dirCompare.compareSync("noEmptyOptionOutput/css/", "test/expected/css/", { compareContent: true });
+        var txtMatch = dirCompare.compareSync("noEmptyOptionOutput/txt/", "test/expected/noEmptyTXT", { compareContent: true });
+
+        test.equal(jsMatch.same && cssMatch.same && txtMatch.same, true,
+            "The result of plugin run with skip empty output files option must match the expected one");
+
+        test.done();
     }
 };

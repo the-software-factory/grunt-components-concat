@@ -1,5 +1,14 @@
+##### ef7801b Fri, 7 Aug 2015 14:20:46 +0200 
+ ###### Merge branch 'master' of https://github.com/the-software-factory/grunt-components-concat 
+ 
+##### 45ca6e4 Fri, 7 Aug 2015 14:20:11 +0200 
+ ###### Changelog updated 
+ 
 ##### e982208 Fri, 7 Aug 2015 14:19:05 +0200 
  ###### Dependency bug fixed, test suite output folders removed 
+ 
+##### 20d122e Fri, 7 Aug 2015 11:53:41 +0200 
+ ###### Release 0.7.0 
  
 ##### a7d1062 Fri, 7 Aug 2015 11:49:31 +0200 
  ###### Merge branch 'master' of https://github.com/the-software-factory/grunt-components-concat 

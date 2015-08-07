@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path');
+var fs = require('fs');
 
 module.exports = function(grunt) {
     grunt.registerMultiTask('components_concat', 'Concatenates files with the same name', function () {
@@ -36,6 +37,7 @@ module.exports = function(grunt) {
         var _excludePaths = (!Array.isArray(this.data.exclude)) ? [] : this.data.exclude;
         var _destFolders = this.data.dest;
         var _minify = (typeof this.data.minify !== "boolean") ? false : this.data.minify;
+        var _skipEmpty = (typeof this.data.skipEmpty !== "boolean") ? false : this.data.skipEmpty;
         var _debugInfo = (typeof this.data.debugInfo !== "boolean") ? false : this.data.debugInfo;
 
         // Controls if configuration options are valid
@@ -62,7 +64,7 @@ module.exports = function(grunt) {
         if (typeof _destFolders === "string") {
             if (grunt.file.exists(_destFolders)) {
                 grunt.log.write("\x1b[33;1m[!] The dest folder '" + _destFolders +
-                    "' already exists, some files might be overwritten\x1b[39;49m\n");
+                    "' already exists, some files might be overwritten\x1b[39;49;0m\n");
             }
         }
         // If the dest path is an array
@@ -72,7 +74,7 @@ module.exports = function(grunt) {
 
                 if (grunt.file.exists(destFolder)) {
                     grunt.log.write("\x1b[33;1m[!] The dest folder '" + destFolder +
-                        "' already exists, some files might be overwritten\x1b[39;49m\n");
+                        "' already exists, some files might be overwritten\x1b[39;49;0m\n");
                 }
             });
         }
@@ -173,12 +175,8 @@ module.exports = function(grunt) {
                 var filenameUnderscore = filename.replace(".", "_");
                 var fileExtension = filename.split(".")[1];
 
-
-
                 // Relative path to the output folder
                 var destFolder = null;
-
-
 
                 // Add an "ext" folder suffix to the destination folder if _destFolders is a string
                 if (typeof _destFolders === "string") {
@@ -200,42 +198,61 @@ module.exports = function(grunt) {
                     }
                 }
 
-                // Add targets for grunt-contrib-concat plugin to concatenate files with the same name
-                grunt.config.set("concat." + filenameUnderscore + ".src", _filesByExtension[fileext][sameNameFiles]);
-                grunt.config.set("concat." + filenameUnderscore + ".dest", destFolder + "/" + filename);
-                if (!_debugInfo) {
-                    grunt.config.set("concat." + filenameUnderscore + ".options", {gruntLogHeader: false});
+
+                var skip = false;
+
+                // Decides if to create the output file
+                if(_skipEmpty) {
+                    var outputSize = 0;
+
+                    _filesByExtension[fileext][sameNameFiles].forEach(function(file) {
+                        outputSize += fs.statSync(file).size;
+                    });
+
+                    if(outputSize === 0) {
+                        skip = true;
+                    }
                 }
-                // Add concat target to the list
-                tasks.concat.push("concat:" + filenameUnderscore);
 
-                // Minify concatenated files if requested
-                if (_minify) {
 
-                    if (fileext === "js" || fileext === "css") {
-                        var output = destFolder + "/" +  filename.split(".")[0] + ".min." + fileext;
-                        var input = destFolder + "/" + filename;
-                        var file = {};
+                if(!skip) {
+                    // Add targets for grunt-contrib-concat plugin to concatenate files with the same name
+                    grunt.config.set("concat." + filenameUnderscore + ".src", _filesByExtension[fileext][sameNameFiles]);
+                    grunt.config.set("concat." + filenameUnderscore + ".dest", destFolder + "/" + filename);
+                    if (!_debugInfo) {
+                        grunt.config.set("concat." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                    }
+                    // Add concat target to the list
+                    tasks.concat.push("concat:" + filenameUnderscore);
 
-                        file[output] = input;
+                    // Minify concatenated files if requested
+                    if (_minify) {
 
-                        if (fileext === "js") {
-                            grunt.config.set("uglify." + filenameUnderscore + ".files", file);
+                        if (fileext === "js" || fileext === "css") {
+                            var output = destFolder + "/" +  filename.split(".")[0] + ".min." + fileext;
+                            var input = destFolder + "/" + filename;
+                            var file = {};
 
-                            if (!_debugInfo) {
-                                grunt.config.set("uglify." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                            file[output] = input;
+
+                            if (fileext === "js") {
+                                grunt.config.set("uglify." + filenameUnderscore + ".files", file);
+
+                                if (!_debugInfo) {
+                                    grunt.config.set("uglify." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                                }
+
+                                tasks.uglify.push("uglify:" + filenameUnderscore);
                             }
+                            else {
+                                grunt.config.set("cssmin." + filenameUnderscore + ".files", file);
 
-                            tasks.uglify.push("uglify:" + filenameUnderscore);
-                        }
-                        else {
-                            grunt.config.set("cssmin." + filenameUnderscore + ".files", file);
+                                if (!_debugInfo) {
+                                    grunt.config.set("cssmin." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                                }
 
-                            if (!_debugInfo) {
-                                grunt.config.set("cssmin." + filenameUnderscore + ".options", {gruntLogHeader: false});
+                                tasks.cssmin.push("cssmin:" + filenameUnderscore);
                             }
-
-                            tasks.cssmin.push("cssmin:" + filenameUnderscore);
                         }
                     }
                 }

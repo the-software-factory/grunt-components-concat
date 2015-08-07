@@ -59,11 +59,16 @@ The concatenation may be optionally followed by the minification (for CSS files)
   The CSS files gets minified and the JS ones get uglified.
 
 #### target.debugInfo
-  * Type: `Boolean`
-  * Mandatory: `NO`
-  * Default: `FALSE`
-  * Description: If it's `FALSE` suppresses the task headers like `Running "uglify:script1_js" (uglify) task`
+* Type: `Boolean`
+* Mandatory: `NO`
+* Default: `FALSE`
+* Description: If it's `FALSE` suppresses the task headers like `Running "uglify:script1_js" (uglify) task`
 
+#### target.skipEmpty
+* Type: `Boolean`
+* Mandatory: `NO`
+* Default: `FALSE`
+* Description: If it's `FALSE` the output files with no content will not be created
 
 ### Usage Examples
 
