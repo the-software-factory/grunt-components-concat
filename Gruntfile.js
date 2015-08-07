@@ -2,6 +2,17 @@
 
 module.exports = function(grunt) {
 
+    grunt.registerTask("changelog", function() {
+        // git log --format=" "
+        // %h  => abbreviated commit hash
+        // %cD => committer date
+        // %cn => committer name
+        // %s  => subject
+        // %b  => body
+
+        require("child_process").exec('git log --format="##### %h %cD %n ###### %s %n %b" > CHANGELOG.md');
+    });
+
   grunt.initConfig({
     jshint: {
       all: [
@@ -15,27 +26,36 @@ module.exports = function(grunt) {
     },
 
     clean: {
-      tests: ['build']
+      ds_store: ["test/expected/**/.DS_Store"],
+      tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput"]
     },
 
     components_concat: {
-      target: {
-        src: "test/fixtures",
-        dest: "build"
-      },
-/*
-        anotherTarget: {
+        defaultOptionsTarget: {
+            src: "test/fixtures",
+            dest: "defaultOptionsOutput"
+        },
+
+        customOutputFoldersTarget: {
             src: "test/fixtures",
             dest: [
-                {"js": "build/js_output"},
-                {"css": "build/css_output"},
-                {"txt": "build/txt_output"}
-            ],
-            exclude: ["test/fixtures/text/*.txt"],
-            minify: true,
-            debugInfo: false
+                {"js": "customOutputFolder/js_output"},
+                {"css": "customOutputFolder/css_output"},
+                {"txt": "customOutputFolder/txt_output"}
+            ]
         },
-*/
+
+        excludeFoldersTarget: {
+            src: "test/fixtures",
+            exclude: ["test/fixtures/text/**/*.txt"],
+            dest: "excludeFoldersOutput"
+        },
+
+        minifyOptionTarget: {
+            src: "test/fixtures",
+            dest: "minifyOptionOutput",
+            minify: true
+        }
     },
 
     nodeunit: {
@@ -51,8 +71,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  grunt.loadNpmTasks("grunt-contrib-uglify");
-
-  grunt.registerTask("test", ['clean', 'jshint', 'components_concat', 'nodeunit']);
+  grunt.registerTask("test", ['clean', 'jshint', 'components_concat', 'nodeunit', 'changelog']);
   grunt.registerTask('default', ['test']);
 };

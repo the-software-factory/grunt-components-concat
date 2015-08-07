@@ -2,7 +2,6 @@
 
 var path = require('path');
 
-
 module.exports = function(grunt) {
     grunt.registerMultiTask('components_concat', 'Concatenates files with the same name', function () {
 
@@ -61,7 +60,6 @@ module.exports = function(grunt) {
         }
 
 
-
         // Gets the list of all the files inside the source folder
         var _srcFiles = grunt.file.expand(_srcFolder + "/**/*");
 
@@ -78,7 +76,9 @@ module.exports = function(grunt) {
             if (_excludeFiles.indexOf(file) >= 0) {
                 return false;
             }
-            else return true;
+            else {
+                return true;
+            }
         });
 
         /**
@@ -171,7 +171,7 @@ module.exports = function(grunt) {
                     // If the current file extension appears in the configuration object,
                     // use the specified folder
                     _destFolders.forEach(function(destObj) {
-                        if (Object.keys(destObj)[0] == fileExtension) {
+                        if (Object.keys(destObj)[0] === fileExtension) {
                             destFolder = destObj[fileExtension];
                         }
                     });

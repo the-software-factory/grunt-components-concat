@@ -102,7 +102,7 @@ grunt.initConfig({
 });
 ```
 
-#### Custom output folders, exclude some files, no minification and debug headers
+#### Standard folders, exclude some files, minification and debug headers
 In this example all the options are set.
 The files mathed by the globbing pattern in `exclude` will be excluded
 The task headers like `Running "uglify:script1_js" (uglify) task` are shown to provide some debug info
