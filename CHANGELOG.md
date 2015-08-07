@@ -1,3 +1,6 @@
+##### 6b89a79 Fri, 7 Aug 2015 11:14:47 +0200 
+ ###### Tests added for recently added features, some minor code fixes, main Gruntfile updated, automatic changelog generator added, first version of contributing guidelines added 
+ 
 ##### 56d2939 Thu, 6 Aug 2015 17:40:14 +0200 
  ###### Exclude files & Suppress task headers options implemented; minor code fixes 
  
