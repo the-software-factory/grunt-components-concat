@@ -1,3 +1,12 @@
+##### a7d1062 Fri, 7 Aug 2015 11:49:31 +0200 
+ ###### Merge branch 'master' of https://github.com/the-software-factory/grunt-components-concat 
+ 
+##### 4cc2f91 Fri, 7 Aug 2015 11:48:19 +0200 
+ ###### Package dependencies fix 
+ 
+##### f5939f8 Fri, 7 Aug 2015 11:18:07 +0200 
+ ###### Released version 0.6.0 
+ 
 ##### 6b89a79 Fri, 7 Aug 2015 11:14:47 +0200 
  ###### Tests added for recently added features, some minor code fixes, main Gruntfile updated, automatic changelog generator added, first version of contributing guidelines added 
  
