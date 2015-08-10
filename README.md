@@ -1,4 +1,4 @@
-# grunt-components-concat
+# grunt-same-filename-concat
 
 > Concatenates files with the same name
 
@@ -14,11 +14,11 @@ npm install grunt-components-concat --save-dev
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-components-concat');
+grunt.loadNpmTasks('same_filename_concat');
 ```
 
 ## Overview
-The "components_concat" task concatenates all the files with the same name inside a source folder and puts the concatenated versions  in the destination folder.
+The "same_filename_concat" task concatenates all the files with the same name inside a source folder and puts the concatenated versions  in the destination folder.
 The "src" target option is mandatory and it's a path to the source folder
 The "dest" target
 The concatenation may be optionally followed by the minification (for CSS files) and uglification (for the JS files).
@@ -94,7 +94,7 @@ Actual task configuration:
 
 ```js
 grunt.initConfig({
-  components_concat: {
+  same_filename_concat: {
     target: {
       src: "test/fixtures",
       dest: [
@@ -131,7 +131,7 @@ Actual task configuration:
 
 ```js
 grunt.initConfig({
-  components_concat: {
+  same_filename_concat: {
     target: {
       src: "test/fixtures",
       exclude: "test/fixtures/junk/**/*",
