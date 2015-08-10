@@ -1,17 +1,8 @@
 'use strict';
 
+var exec = require('child_process').exec;
+
 module.exports = function(grunt) {
-
-    grunt.registerTask("changelog", function() {
-        // git log --format=" "
-        // %h  => abbreviated commit hash
-        // %cD => committer date
-        // %cn => committer name
-        // %s  => subject
-        // %b  => body
-
-        require("child_process").exec('git log --format="##### %h %cD %n ###### %s %n %b" > CHANGELOG.md');
-    });
 
   grunt.initConfig({
     jshint: {
@@ -27,7 +18,8 @@ module.exports = function(grunt) {
 
     clean: {
       ds_store: ["test/expected/**/.DS_Store"],
-      tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput"]
+      tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput",
+          "noEmptyOptionOutput"]
     },
 
     components_concat: {
@@ -66,8 +58,19 @@ module.exports = function(grunt) {
 
     nodeunit: {
       test: ['test/*_test.js']
-    }
-  });
+  },
+
+  conventionalChangelog: {
+      options: {
+          changelogOpts: {
+              preset: "jshint"
+          }
+      },
+      release: {
+          src: "CHANGELOG.md"
+      }
+  }
+});
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
@@ -76,7 +79,33 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-conventional-changelog');
 
-  grunt.registerTask("test", ['clean', 'jshint', 'components_concat', 'nodeunit', 'changelog']);
+  grunt.registerTask("changelogCommit", function() {
+      var done = this.async();
+
+      var gitAdder = exec('git add CHANGELOG.md');
+
+      gitAdder.on("exit", function(exitCode) {
+          if (exitCode != 0) {
+              grunt.fail.fatal("changelogCommit task couldn't exec git add command");
+          }
+
+          var gitCommitter = exec('git commit -m "CHANGELOG.md Updated"');
+
+          gitCommitter.on("exit", function(exitCode) {
+              if (exitCode != 0) {
+                  grunt.fail.fatal("changelogCommit task couldn't exec git commit command");
+              }
+
+              grunt.log.ok("Changelog commit is ready");
+              done();
+          });
+      });
+  });
+
+  grunt.registerTask("changelog", ["conventionalChangelog", "changelogCommit"]);
+
+  grunt.registerTask("test", ['clean', 'jshint', 'components_concat', 'nodeunit']);
   grunt.registerTask('default', ['test']);
 };

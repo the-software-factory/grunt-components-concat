@@ -22,6 +22,8 @@ or new features to out project with the "Pull Request" procedure.
 * [Pull in changes](https://help.github.com/articles/syncing-a-fork) frequently in order to stay up to date and avoid
 merge conflicts
 * [Create](http://guides.github.com/introduction/flow/) a branch for your edits
+* Remember to follow [this](https://github.com/ajoslin/conventional-changelog/blob/master/conventions/jshint.md) conventions to write the commit messages in order to be able to automatically generate the
+CHANGELOG.md file
 * Run all the existing tests, and eventually your own. Make sure that your changes didn't break the project
 * Make a Pull Request; be clear about what problem is occurring and how someone can recreate that problem or why your
 feature will help. Then be equally as clear about the steps you took to make your changes.
