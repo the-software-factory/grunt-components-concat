@@ -33,13 +33,13 @@ The concatenation may be optionally followed by the minification (for CSS files)
 * Type: `Array`
 * Mandatory: `NO`
 * Default: `[]`
-* Description: An array of globbing patterns of files to exclude 
+* Description: An array of globbing patterns of files to exclude
 
 #### target.dest
 * Type: `String` or `Array`
 * Mandatory: `YES`
 * Description:
-  * If `dest` is a string, than the output directory for the files with the same extension will be `dest` / `ext` / 
+  * If `dest` is a string, than the output directory for the files with the same extension will be `dest` / `ext` /
   * If `dest` is an array, it maps the file extension to custom output folder; it must be built as follows:
 ```
       [
@@ -145,7 +145,25 @@ grunt.initConfig({
 
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+Take a look at the [CONTRIBUTING.md](https://github.com/the-software-factory/grunt-components-concat/blob/master/CONTRIBUTING.md) file
 
-## Release History
-_(Nothing yet)_
+## Changelog
+Take a look at the [CHANGELOG.md]() file
+
+### Grunt Tasks
+Here is a list of grunt `tasks` => `actions` mappings, see below for a deeper explanation of the actions.
+
+|   *Grunt task*  | *clean* | *jshint* | *same_filename_concat* | *nodeunit* | *conventionalChangelog* | *changelogCommit* |
+|-----------------|:-------:|:--------:|:----------------------:|:----------:|:-----------------------:|:-----------------:|
+|      grunt      |    *    |    *     |            *           |     *      |                         |                   |
+| grunt changelog |         |          |                        |            |            *            |          *        |
+
+* *clean*: Removes test output folders
+* *jshint*: Validate files with JSHint.
+* *same_filename_concat*: Concatenates file with same filenames; the plugin task
+* *nodeunit*: Tests if the actual test output matches the expected one
+* *conventionalChangelog*: Generates a CHANGELOG.md file from the git log
+* *changelogCommit*: Prepares a new git commit with the CHANGELOG.md file
+
+## Tests
+Take a look at [`test/README.md`](test/README.md) for more details.

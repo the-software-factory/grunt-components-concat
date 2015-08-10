@@ -4,7 +4,7 @@ var path = require('path');
 var fs = require('fs');
 
 module.exports = function(grunt) {
-    grunt.registerMultiTask('components_concat', 'Concatenates files with the same name', function () {
+    grunt.registerMultiTask('same_filename_concat', 'Concatenates files with the same name', function () {
 
         // The directory of the main Gruntfile
         var gruntCwd = process.cwd();

@@ -22,7 +22,7 @@ module.exports = function(grunt) {
           "noEmptyOptionOutput"]
     },
 
-    components_concat: {
+    same_filename_concat: {
         defaultOptionsTarget: {
             src: "test/fixtures",
             dest: "defaultOptionsOutput"
@@ -87,14 +87,14 @@ module.exports = function(grunt) {
       var gitAdder = exec('git add CHANGELOG.md');
 
       gitAdder.on("exit", function(exitCode) {
-          if (exitCode != 0) {
+          if (exitCode !== 0) {
               grunt.fail.fatal("changelogCommit task couldn't exec git add command");
           }
 
           var gitCommitter = exec('git commit -m "CHANGELOG.md Updated"');
 
           gitCommitter.on("exit", function(exitCode) {
-              if (exitCode != 0) {
+              if (exitCode !== 0) {
                   grunt.fail.fatal("changelogCommit task couldn't exec git commit command");
               }
 
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("changelog", ["conventionalChangelog", "changelogCommit"]);
-
-  grunt.registerTask("test", ['clean', 'jshint', 'components_concat', 'nodeunit']);
+  grunt.registerTask("test", ['clean', 'jshint', 'same_filename_concat', 'nodeunit']);
+  
   grunt.registerTask('default', ['test']);
 };
