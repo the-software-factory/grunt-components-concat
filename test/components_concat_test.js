@@ -96,5 +96,17 @@ exports.components_concat = {
             "The result of plugin run with multiple source folders specification must match the expected one");
 
         test.done();
+    },
+
+    renameAndMinifyMultipleSourcesTest: function(test) {
+        test.expect(1);
+
+        var script1_match = dirCompare.compareSync("renameTaskFolder/script1/", "test/expected/renameTaskFolder/script1/", { compareContent: true });
+        var script3_match = dirCompare.compareSync("renameTaskFolder/script3/", "test/expected/renameTaskFolder/script3/", { compareContent: true });
+
+        test.equal(script1_match.same && script3_match.same, true,
+            "The result of plugin run with multiple sources, rename and minify options must match the expected one");
+
+        test.done();
     }
 };

@@ -8,14 +8,16 @@ This plugin requires Grunt `~0.4.5`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-components-concat --save-dev
+npm install grunt-same-filename-concat --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('same_filename_concat');
+grunt.loadNpmTasks("grunt-same-filename-concat");
 ```
+
+That you should specify some targets for the `same_filename_concat` task
 
 ## Overview
 The "same_filename_concat" task concatenates all the files with the same name inside a source folder and puts the concatenated versions  in the destination folder.
@@ -69,6 +71,71 @@ The concatenation may be optionally followed by the minification (for CSS files)
 * Mandatory: `NO`
 * Default: `FALSE`
 * Description: If it's `FALSE` the output files with no content will not be created
+
+
+## Target options
+#### target.src
+* Type: `String`
+* Mandatory: `YES`
+* Description: It's a path to the source folder which files you want to concatenate
+
+### target.exclude
+* Type: `Array`
+* Mandatory: `NO`
+* Default: `[]`
+* Description: An array of globbing patterns of files to exclude
+
+#### target.dest
+* Type: `String` or `Array`
+* Mandatory: `YES`
+* Description:
+  * If `dest` is a string, than the output directory for the files with the same extension will be `dest` / `ext` /
+  * If `dest` is an array, it maps the file extension to custom output folder; it must be built as follows:
+```
+      [
+        { "txt" : "text_folder" },
+        { "js" : "scripts/js" },
+        { "css" : "output/styles/css" },
+        ...
+      ]
+```
+
+#### target.minify
+* Type: `Boolean`
+* Mandatory: `NO`
+* Default: `FALSE`
+* Description:
+  If it's `TRUE` than the minified versions will be also produced for the JS and CSS files.
+  The CSS files gets minified and the JS ones get uglified.
+
+#### target.debugInfo
+* Type: `Boolean`
+* Mandatory: `NO`
+* Default: `FALSE`
+* Description: If it's `FALSE` suppresses the task headers like `Running "uglify:script1_js" (uglify) task`
+
+#### target.skipEmpty
+* Type: `Boolean`
+* Mandatory: `NO`
+* Default: `FALSE`
+* Description: If it's `FALSE` the output files with no content will not be created
+
+#### target.rename(dest, src)
+* Type: `Function`
+* Mandatory: `NO`
+* Description:
+You can specify the 'rename' function which allows you to change the destination path at runtime.
+The 'rename' function has 2 parameters:
+    * dest {string} Full destination path for current target, like `'output/folder/script.js'`
+    * src {string[]} Array of full source paths for a filename, like
+```
+[
+    'input/folder/script.js',
+    'input/folder/subfolder/script.js'
+]
+```
+The return result of this function will overwrite the standard calculated destination path, so you
+can make make you build process more flexible
 
 ### Usage Examples
 

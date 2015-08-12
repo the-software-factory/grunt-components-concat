@@ -38,6 +38,7 @@ module.exports = function(grunt) {
         var _minify = (typeof this.data.minify !== "boolean") ? false : this.data.minify;
         var _skipEmpty = (typeof this.data.skipEmpty !== "boolean") ? false : this.data.skipEmpty;
         var _debugInfo = (typeof this.data.debugInfo !== "boolean") ? false : this.data.debugInfo;
+        var _renameFunction = this.data.rename;
 
         // Controls if configuration options are valid
 
@@ -95,6 +96,13 @@ module.exports = function(grunt) {
                 }
             });
         }
+
+        if  (typeof _renameFunction !== "function" &&
+                typeof _renameFunction !== "undefined") {
+            grunt.log.error("rename option must be a function");
+            grunt.fail.fatal("can't run the task due to a fatal error");
+        }
+
 
         // Gets the list of all the files inside the source folder
         var _srcFiles = [];
@@ -238,9 +246,21 @@ module.exports = function(grunt) {
 
                 if (!skip && destFolder !== null) {
 
+                    // Rename option handling
+                    var renameSrc, renameDest = null;
+
+                    if (typeof _renameFunction === "function") {
+                        renameSrc = _filesByExtension[fileext][sameNameFiles];
+                        renameDest =  destFolder + "/" + filename;
+
+                        renameDest = _renameFunction(renameDest, renameSrc);
+                    }
+
                     // Add targets for grunt-contrib-concat plugin to concatenate files with the same name
                     grunt.config.set("concat." + filenameUnderscore + ".src", _filesByExtension[fileext][sameNameFiles]);
-                    grunt.config.set("concat." + filenameUnderscore + ".dest", destFolder + "/" + filename);
+                    grunt.config.set("concat." + filenameUnderscore + ".dest",
+                        (renameDest !== null) ? renameDest : destFolder + "/" + filename);
+
                     if (!_debugInfo) {
                         grunt.config.set("concat." + filenameUnderscore + ".options", {gruntLogHeader: false});
                     }
@@ -252,9 +272,19 @@ module.exports = function(grunt) {
                     if (_minify) {
 
                         if (fileext === "js" || fileext === "css") {
-                            var output = destFolder + "/" +  filename.split(".")[0] + ".min." + fileext;
-                            var input = destFolder + "/" + filename;
-                            var file = {};
+                            var output, input, file;
+
+                            // Sets up minification input/output paths
+                            if (renameDest !== null) {
+                                output = path.dirname(renameDest) + "/" + path.basename(renameDest).split(".")[0] + ".min." + path.basename(renameDest).split(".")[1];
+                                input = renameDest;
+                            }
+                            else {
+                                output = destFolder + "/" +  filename.split(".")[0] + ".min." + fileext;
+                                input = destFolder + "/" + filename;
+                            }
+
+                            file = {};
 
                             file[output] = input;
 
@@ -283,7 +313,7 @@ module.exports = function(grunt) {
                             }
 
                             var filesToRemove = grunt.config.get("clean.sameNameConcatMinificationCleanup");
-                            filesToRemove.push(destFolder + "/" + filename);
+                            filesToRemove.push(input);
                             grunt.config.set("clean.sameNameConcatMinificationCleanup", filesToRemove);
                         }
                     }

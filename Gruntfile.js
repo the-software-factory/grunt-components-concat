@@ -1,6 +1,7 @@
 'use strict';
 
 var exec = require('child_process').exec;
+var path = require('path');
 
 module.exports = function(grunt) {
 
@@ -19,7 +20,7 @@ module.exports = function(grunt) {
     clean: {
       ds_store: ["test/expected/**/.DS_Store"],
       tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput",
-          "noEmptyOptionOutput", "partialOutputFolder", "multipleSourcesOutput"]
+          "noEmptyOptionOutput", "partialOutputFolder", "multipleSourcesOutput", "renameTaskFolder"]
     },
 
     same_filename_concat: {
@@ -69,6 +70,23 @@ module.exports = function(grunt) {
                 "test/fixtures/js/"
             ],
             dest: "multipleSourcesOutput"
+        },
+
+        renameAndMinifyMultipleSourcesTarget: {
+            src: [
+                "test/fixtures/code/other",
+                "test/fixtures/js/"
+            ],
+            dest: [
+                {"js": "renameTaskFolder/js_output"},
+                {"css": "renameTaskFolder/css_output"},
+                {"txt": "renameTaskFolder/txt_output"}
+            ],
+            // Makes custom destinatio folder at runtime
+            rename: function(dest, src) {
+                return "renameTaskFolder/" + path.basename(src[0]).split(".")[0] + "/" + path.basename(src[0]);
+            },
+            minify: true
         }
     },
 
