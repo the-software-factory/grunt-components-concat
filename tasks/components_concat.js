@@ -4,6 +4,17 @@ var path = require('path');
 var fs = require('fs');
 
 module.exports = function(grunt) {
+    var minifiedFiles = [];
+
+    grunt.registerTask("removeEmptyMinifiedFiles", function() {
+        minifiedFiles.forEach(function(file) {
+            if(fs.statSync(file).size === 0) {
+                grunt.file.delete(file, { force: true });
+                grunt.log.ok("Empty minified file " + file + " was removed");
+            }
+        });
+    });
+
     grunt.registerMultiTask('same_filename_concat', 'Concatenates files with the same name', function () {
         // The directory of the main Gruntfile
         var gruntCwd = process.cwd();
@@ -307,6 +318,8 @@ module.exports = function(grunt) {
                                 tasks.cssmin.push("cssmin:" + filenameUnderscore);
                             }
 
+                            minifiedFiles.push(output);
+
                             // Sets up clean task to remove non-minified files
                             if(!Array.isArray(grunt.config.get("clean.sameNameConcatMinificationCleanup"))) {
                                 grunt.config.set("clean.sameNameConcatMinificationCleanup", []);
@@ -330,6 +343,11 @@ module.exports = function(grunt) {
             tasks[task].forEach(function(taskAndTarget) {
                 grunt.task.run(taskAndTarget);
             });
+        }
+
+        // Removes empty minified files is skipEmpty = true
+        if (_skipEmpty) {
+            grunt.task.run("removeEmptyMinifiedFiles");
         }
 
         // Removes the targets inserted by the plugin
