@@ -5,7 +5,6 @@ var fs = require('fs');
 
 module.exports = function(grunt) {
     grunt.registerMultiTask('same_filename_concat', 'Concatenates files with the same name', function () {
-
         // The directory of the main Gruntfile
         var gruntCwd = process.cwd();
         // The directory of the components_concat task script
@@ -16,7 +15,7 @@ module.exports = function(grunt) {
         // Checks if components_concat is used like a Grunt plugin; if so temporarily changes the CWD
         // in order to load components_concat dependencies
         if(isPlugin) {
-            process.chdir(gruntCwd + "/node_modules/grunt-components-concat/");
+            process.chdir(gruntCwd + "/node_modules/grunt-same-filename-concat/");
         }
 
         // Loads Grunt plugins used for cancatenation and minification
@@ -42,15 +41,33 @@ module.exports = function(grunt) {
 
         // Controls if configuration options are valid
 
-        if (typeof _srcFolder !== "string") {
+        if (typeof _srcFolder !== "string" && !Array.isArray(_srcFolder)) {
             grunt.log.error("src option is invalid");
             grunt.fail.fatal("can't run the task due to a fatal error");
         }
 
-        if (!grunt.file.exists(_srcFolder)) {
-            grunt.log.error("The source folder doesn't exist");
+        // Checks if all specified source folders exist. Stops the task and prints the list of
+        // missing source folders on fail
+        if (!Array.isArray(_srcFolder)) {
+            _srcFolder = [_srcFolder];
+        }
+
+        var inexistentSources = [];
+
+        _srcFolder.forEach(function(folder) {
+            if (!fs.existsSync(folder)) {
+                inexistentSources.push(folder);
+            }
+        });
+
+        if (inexistentSources.length !== 0) {
+            inexistentSources.forEach(function(folder) {
+                grunt.log.error("The source folder '" + folder + "' doesn't exist");
+            });
+
             grunt.fail.fatal("can't run the task due to a fatal error");
         }
+
 
         if (typeof _destFolders !== "string" &&
                 !Array.isArray(_destFolders)) {
@@ -79,9 +96,17 @@ module.exports = function(grunt) {
             });
         }
 
-
         // Gets the list of all the files inside the source folder
-        var _srcFiles = grunt.file.expand(_srcFolder + "/**/*");
+        var _srcFiles = [];
+
+        if (Array.isArray(_srcFolder)) {
+            _srcFolder.forEach(function(folder) {
+                _srcFiles = _srcFiles.concat(grunt.file.expand(folder + "/**/*"));
+            });
+        }
+        else {
+            _srcFiles = grunt.file.expand(_srcFolder + "/**/*");
+        }
 
         // Holds files to exclude
         var _excludeFiles = [];
@@ -162,7 +187,8 @@ module.exports = function(grunt) {
         var tasks = {
             concat: [],
             uglify: [],
-            cssmin: []
+            cssmin: [],
+            clean: []
         };
 
         // Loops through arrays of arrays of files with same name by extension
@@ -191,18 +217,13 @@ module.exports = function(grunt) {
                             destFolder = destObj[fileExtension];
                         }
                     });
-
-                    // If not, shoot an error and quit
-                    if (destFolder === null) {
-                        grunt.fail.fatal("No output folder specified for ." + fileExtension + " extension");
-                    }
                 }
 
 
                 var skip = false;
 
                 // Decides if to create the output file
-                if(_skipEmpty) {
+                if (_skipEmpty) {
                     var outputSize = 0;
 
                     _filesByExtension[fileext][sameNameFiles].forEach(function(file) {
@@ -215,13 +236,15 @@ module.exports = function(grunt) {
                 }
 
 
-                if(!skip) {
+                if (!skip && destFolder !== null) {
+
                     // Add targets for grunt-contrib-concat plugin to concatenate files with the same name
                     grunt.config.set("concat." + filenameUnderscore + ".src", _filesByExtension[fileext][sameNameFiles]);
                     grunt.config.set("concat." + filenameUnderscore + ".dest", destFolder + "/" + filename);
                     if (!_debugInfo) {
                         grunt.config.set("concat." + filenameUnderscore + ".options", {gruntLogHeader: false});
                     }
+
                     // Add concat target to the list
                     tasks.concat.push("concat:" + filenameUnderscore);
 
@@ -253,10 +276,23 @@ module.exports = function(grunt) {
 
                                 tasks.cssmin.push("cssmin:" + filenameUnderscore);
                             }
+
+                            // Sets up clean task to remove non-minified files
+                            if(!Array.isArray(grunt.config.get("clean.sameNameConcatMinificationCleanup"))) {
+                                grunt.config.set("clean.sameNameConcatMinificationCleanup", []);
+                            }
+
+                            var filesToRemove = grunt.config.get("clean.sameNameConcatMinificationCleanup");
+                            filesToRemove.push(destFolder + "/" + filename);
+                            grunt.config.set("clean.sameNameConcatMinificationCleanup", filesToRemove);
                         }
                     }
                 }
             }
+        }
+
+        if (_minify) {
+            tasks.clean.push("clean:sameNameConcatMinificationCleanup");
         }
 
         // Runs the tasks in order defined and removes them from the global Grunt configuration

@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     clean: {
       ds_store: ["test/expected/**/.DS_Store"],
       tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput",
-          "noEmptyOptionOutput"]
+          "noEmptyOptionOutput", "partialOutputFolder", "multipleSourcesOutput"]
     },
 
     same_filename_concat: {
@@ -53,6 +53,22 @@ module.exports = function(grunt) {
             src: "test/fixtures",
             dest: "noEmptyOptionOutput",
             skipEmpty: true
+        },
+
+        partialFormatConfiguration: {
+            src: "test/fixtures",
+            dest: [
+                {"js": "partialOutputFolder/js_output"},
+                {"txt": "partialOutputFolder/txt_output"}
+            ]
+        },
+
+        multipleSourceFolders: {
+            src: [
+                "test/fixtures/code/",
+                "test/fixtures/js/"
+            ],
+            dest: "multipleSourcesOutput"
         }
     },
 
@@ -106,6 +122,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask("changelog", ["conventionalChangelog", "changelogCommit"]);
   grunt.registerTask("test", ['clean', 'jshint', 'same_filename_concat', 'nodeunit']);
-  
+
   grunt.registerTask('default', ['test']);
 };

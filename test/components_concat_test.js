@@ -70,5 +70,31 @@ exports.components_concat = {
             "The result of plugin run with skip empty output files option must match the expected one");
 
         test.done();
+    },
+
+    partialFormatTest: function(test) {
+        test.expect(1);
+
+        var jsMatch = dirCompare.compareSync("noEmptyOptionOutput/js/", "test/expected/js/", { compareContent: true });
+        var txtMatch = dirCompare.compareSync("noEmptyOptionOutput/txt/", "test/expected/noEmptyTXT", { compareContent: true });
+        var cssFolderExists = fs.existsSync("partialOutputFolder/css_output");
+
+        test.equal(jsMatch.same && !cssFolderExists && txtMatch.same, true,
+            "The result of plugin run with partial output format specification must match the expected one");
+
+        test.done();
+    },
+
+    multipleSourcesTest: function(test) {
+        test.expect(1);
+
+        var jsMatch = dirCompare.compareSync("multipleSourcesOutput/js/", "test/expected/js/", { compareContent: true });
+        var txtMatch = dirCompare.compareSync("multipleSourcesOutput/txt/", "test/expected/multipleSourcesTXT", { compareContent: true });
+        var cssFolderExists = fs.existsSync("multipleSourcesOutput/css");
+
+        test.equal(jsMatch.same && !cssFolderExists && txtMatch.same, true,
+            "The result of plugin run with multiple source folders specification must match the expected one");
+
+        test.done();
     }
 };
