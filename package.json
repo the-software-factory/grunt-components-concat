@@ -6,10 +6,12 @@
     "name": "Andrea Stronati",
     "email": "astronati@vendini.com"
   },
-  "contributors": {
-    "name": "Alexei Liulin",
-    "email": "codwizard@gmail.com"
-  },
+  "contributors": [
+    {
+      "name": "Alexei Liulin",
+      "email": "codwizard@gmail.com"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "grunt-contrib-concat": "^0.5.1",
@@ -23,6 +25,7 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-jshint": "^0.9.2",
     "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-conventional-changelog": "^4.0.0"
   },
   "keywords": []

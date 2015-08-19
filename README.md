@@ -1,44 +1,42 @@
 # grunt-same-filename-concat
 
-> Concatenates files with the same name
+Concatenates files with the same name
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
-```shell
-npm install grunt-same-filename-concat --save-dev
+## Installation
+You'll need [node](https://nodejs.org/) to install and use grunt-same-filename-concat plugin and its dependencies.
+Install the plugin and save it as a development dependency in your project:
+```sh
+$ npm --save-dev install https://github.com/the-software-factory/grunt-components-concat.git
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Once the plugin has been installed, it can be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
 grunt.loadNpmTasks("grunt-same-filename-concat");
 ```
 
-That you should specify some targets for the `same_filename_concat` task
+Then you should specify some targets for the `same_filename_concat` task
 
-## Overview
-The "same_filename_concat" task concatenates all the files with the same name inside a source folder and puts the concatenated versions  in the destination folder.
-The "src" target option is mandatory and it's a path to the source folder
-The "dest" target
-The concatenation may be optionally followed by the minification (for CSS files) and uglification (for the JS files).
+## Task configuration options
 
-## Target options
 #### target.src
-* Type: `String`
+* Type: `String | String[]`
 * Mandatory: `YES`
-* Description: It's a path to the source folder which files you want to concatenate
+* Description: It's a path or an array of paths to the source folders which files you want to concatenate
 
-### target.exclude
+#### target.exclude
 * Type: `Array`
 * Mandatory: `NO`
 * Default: `[]`
 * Description: An array of globbing patterns of files to exclude
 
 #### target.dest
-* Type: `String` or `Array`
+* Type: `String | Object[]`
 * Mandatory: `YES`
 * Description:
   * If `dest` is a string, than the output directory for the files with the same extension will be `dest` / `ext` /
@@ -57,62 +55,14 @@ The concatenation may be optionally followed by the minification (for CSS files)
 * Mandatory: `NO`
 * Default: `FALSE`
 * Description:
-  If it's `TRUE` than the minified versions will be also produced for the JS and CSS files.
-  The CSS files gets minified and the JS ones get uglified.
+  If it's `TRUE` than the minified versions of the JS and CSS files will be produced.
+  The CSS files gets minified and the JS ones gets uglified.
 
 #### target.debugInfo
 * Type: `Boolean`
 * Mandatory: `NO`
 * Default: `FALSE`
-* Description: If it's `FALSE` suppresses the task headers like `Running "uglify:script1_js" (uglify) task`
-
-#### target.skipEmpty
-* Type: `Boolean`
-* Mandatory: `NO`
-* Default: `FALSE`
-* Description: If it's `FALSE` the output files with no content will not be created
-
-
-## Target options
-#### target.src
-* Type: `String`
-* Mandatory: `YES`
-* Description: It's a path to the source folder which files you want to concatenate
-
-### target.exclude
-* Type: `Array`
-* Mandatory: `NO`
-* Default: `[]`
-* Description: An array of globbing patterns of files to exclude
-
-#### target.dest
-* Type: `String` or `Array`
-* Mandatory: `YES`
-* Description:
-  * If `dest` is a string, than the output directory for the files with the same extension will be `dest` / `ext` /
-  * If `dest` is an array, it maps the file extension to custom output folder; it must be built as follows:
-```
-      [
-        { "txt" : "text_folder" },
-        { "js" : "scripts/js" },
-        { "css" : "output/styles/css" },
-        ...
-      ]
-```
-
-#### target.minify
-* Type: `Boolean`
-* Mandatory: `NO`
-* Default: `FALSE`
-* Description:
-  If it's `TRUE` than the minified versions will be also produced for the JS and CSS files.
-  The CSS files gets minified and the JS ones get uglified.
-
-#### target.debugInfo
-* Type: `Boolean`
-* Mandatory: `NO`
-* Default: `FALSE`
-* Description: If it's `FALSE` suppresses the task headers like `Running "uglify:script1_js" (uglify) task`
+* Description: If it's `FALSE`, the task headers like `Running "uglify:script1_js" (uglify) task` will be suppressed
 
 #### target.skipEmpty
 * Type: `Boolean`
@@ -139,9 +89,9 @@ can make make you build process more flexible
 
 ### Usage Examples
 
-#### Custom output folders, no minification
+#### Custom output folders
 In this example only mandatory options are specified.
-The target.minify will take the default `FALSE` value.
+Other options will assume their default values.
 The concatenated files will be put into the custom folders, like this:
 
 ```
@@ -169,15 +119,14 @@ grunt.initConfig({
         {"css": "build/css_output"},
         {"txt": "build/txt_output"}
       ]
-    },
-  },
+    }
+  }
 });
 ```
 
-#### Standard folders, exclude some files, minification and debug headers
-In this example all the options are set.
-The files mathed by the globbing pattern in `exclude` will be excluded
-The task headers like `Running "uglify:script1_js" (uglify) task` are shown to provide some debug info
+#### Standard folders, exclude files, minification and debug headers
+The files matched by the globbing pattern in `exclude` will be excluded.
+The task headers like `Running "uglify:script1_js" (uglify) task` are shown to provide some debug info.
 The concatenated and minified files will be put inside the per-extension folders inside the "output" folder like this:
 
 ```
@@ -205,32 +154,32 @@ grunt.initConfig({
       dest: "output",
       minify: true,
       debugInfo: true
-    },
-  },
+    }
+  }
 });
 ```
-
-
-## Contributing
-Take a look at the [CONTRIBUTING.md](https://github.com/the-software-factory/grunt-components-concat/blob/master/CONTRIBUTING.md) file
-
-## Changelog
-Take a look at the [CHANGELOG.md]() file
 
 ### Grunt Tasks
 Here is a list of grunt `tasks` => `actions` mappings, see below for a deeper explanation of the actions.
 
-|   *Grunt task*  | *clean* | *jshint* | *same_filename_concat* | *nodeunit* | *conventionalChangelog* | *changelogCommit* |
-|-----------------|:-------:|:--------:|:----------------------:|:----------:|:-----------------------:|:-----------------:|
-|      grunt      |    *    |    *     |            *           |     *      |                         |                   |
-| grunt changelog |         |          |                        |            |            *            |          *        |
+|   *Grunt task*    | *jshint* |  *watch*  | *clean* | *same_filename_concat* | *nodeunit* | *emptyTheChangelog* | *conventionalChangelog* | *changelogCommit* |
+|-------------------|:--------:|:---------:|:-------:|:----------------------:|:----------:|:-------------------:|:-----------------------:|:-----------------:|
+|      grunt        |    *     |           |         |                        |            |                     |                         |                   |
+| grunt development |          |     *     |         |                        |            |                     |                         |                   |
+|   grunt test      |          |           |    *    |            *           |     *      |                     |                         |                   |
+| grunt changelog   |          |           |         |                        |            |          *          |            *            |         *         |
 
-* *clean*: Removes test output folders
 * *jshint*: Validate files with JSHint.
+* *watch*: Runs default task every time The Gruntfile, sources or tests change
+* *clean*: Removes test's output folders to cleanup the test environment
 * *same_filename_concat*: Concatenates file with same filenames; the plugin task
-* *nodeunit*: Tests if the actual test output matches the expected one
+* *nodeunit*: Tests if the actual test's output matches the expected one
+* *emptyTheChangelog*: Truncates the CHANGELOG.md file as conventionalChangelog task will append fully regenerated changelog
 * *conventionalChangelog*: Generates a CHANGELOG.md file from the git log
 * *changelogCommit*: Prepares a new git commit with the CHANGELOG.md file
 
 ## Tests
 Take a look at [`test/README.md`](test/README.md) for more details.
+
+## Contributing
+Take a look at [`CONTRIBUTING.md`](CONTRIBUTING.md) for more details.
