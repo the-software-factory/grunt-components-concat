@@ -1,11 +1,12 @@
 <a name="0.12.0"></a>
-# [0.12.0](//compare/0.12.0...v0.12.0) (2015-08-25)
+# [0.12.0](//compare/0.12.0...v0.12.0) (2015-09-01)
 
 
 ### Features
 
 * Grunt changelog task modified 6ace490
 * README.md updated, Grunt tasks updated, package.json updated 48c91e2
+* TravisCI configuration file added 8c53424
 
 
 
