@@ -6,6 +6,7 @@
 
 * Grunt changelog task modified 6ace490
 * README.md updated, Grunt tasks updated, package.json updated 48c91e2
+* Travis badge prepended to the README.md f5d1412
 * TravisCI configuration file added 8c53424
 
 
