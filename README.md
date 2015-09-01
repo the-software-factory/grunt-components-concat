@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/the-software-factory/grunt-components-concat.svg)](https://travis-ci.org/the-software-factory/grunt-components-concat)
+
 # grunt-same-filename-concat
 
 Concatenates files with the same name
