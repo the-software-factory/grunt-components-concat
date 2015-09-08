@@ -6,102 +6,119 @@ var fs = require('fs');
 
 module.exports = function(grunt) {
 
-    grunt.initConfig({
-        jshint: {
-            all: [
-                'Gruntfile.js',
-                'tasks/*.js',
-                'test/*_test.js'
-            ],
-            options: {
-                jshintrc: '.jshintrc'
-            }
-        },
-        clean: {
-            ds_store: ["test/expected/**/.DS_Store"],
-            tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput",
-            "noEmptyOptionOutput", "partialOutputFolder", "multipleSourcesOutput", "renameTaskFolder"
-        ]
+  grunt.initConfig({
+    jshint: {
+      all: [
+        'Gruntfile.js',
+        'tasks/*.js',
+        'test/*_test.js'
+      ],
+      options: {
+        jshintrc: '.jshintrc'
+      }
     },
-    same_filename_concat: {
-        defaultOptionsTarget: {
-            src: "test/fixtures",
-            dest: "defaultOptionsOutput"
-        },
-        customOutputFoldersTarget: {
-            src: "test/fixtures",
-            dest: [
-                {"js": "customOutputFolder/js_output"},
-                {"css": "customOutputFolder/css_output"},
-                {"txt": "customOutputFolder/txt_output"}
-            ]
-        },
-        excludeFoldersTarget: {
-            src: "test/fixtures",
-            exclude: ["test/fixtures/text/**/*.txt"],
-            dest: "excludeFoldersOutput"
-        },
-        minifyOptionTarget: {
-            src: "test/fixtures",
-            dest: "minifyOptionOutput",
-            minify: true
-        },
-        skipEmptyFilesOutput: {
-            src: "test/fixtures",
-            dest: "noEmptyOptionOutput",
-            skipEmpty: true
-        },
-        partialFormatConfiguration: {
-            src: "test/fixtures",
-            dest: [
-                {"js": "partialOutputFolder/js_output"},
-                {"txt": "partialOutputFolder/txt_output"}
-            ]
-        },
-        multipleSourceFolders: {
-            src: [
-                "test/fixtures/code/",
-                "test/fixtures/js/"
-            ],
-            dest: "multipleSourcesOutput"
-        },
-        renameAndMinifyMultipleSourcesTarget: {
-            src: [
-                "test/fixtures/code/other",
-                "test/fixtures/js/"
-            ],
-            dest: [
-                {"js": "renameTaskFolder/js_output"},
-                {"css": "renameTaskFolder/css_output"},
-                {"txt": "renameTaskFolder/txt_output"}
-            ],
-            // Makes custom destinatio folder at runtime
-            rename: function(dest, src) {
-                return "renameTaskFolder/" + path.basename(src[0]).split(".")[0] + "/" + path.basename(src[0]);
-            },
-            minify: true
-        }
+    clean: {
+      ds_store: ["test/expected/**/.DS_Store"],
+      tests: ["defaultOptionsOutput", "customOutputFolder", "excludeFoldersOutput", "minifyOptionOutput",
+      "noEmptyOptionOutput", "partialOutputFolder", "multipleSourcesOutput", "renameTaskFolder"
+    ]
+  },
+  same_filename_concat: {
+    defaultOptionsTarget: {
+      src: "test/fixtures",
+      dest: "defaultOptionsOutput"
     },
-    nodeunit: {
-        test: ['test/*_test.js']
+    customOutputFoldersTarget: {
+      src: "test/fixtures",
+      dest: [
+        {"js": "customOutputFolder/js_output"},
+        {"css": "customOutputFolder/css_output"},
+        {"txt": "customOutputFolder/txt_output"}
+      ]
     },
-    watch: {
-        scripts: {
-            files:  ['Gruntfile.js', 'tasks/*.js', 'test/*.js'],
-            tasks: ['default']
-        }
+    excludeFoldersTarget: {
+      src: "test/fixtures",
+      exclude: ["test/fixtures/text/**/*.txt"],
+      dest: "excludeFoldersOutput"
     },
-    conventionalChangelog: {
-        options: {
-            changelogOpts: {
-                preset: 'jshint',
-                releaseCount: 0
-            }
-        },
-        release: {
-            src: 'CHANGELOG.md'
-        }
+    minifyOptionTarget: {
+      src: "test/fixtures",
+      dest: "minifyOptionOutput",
+      minify: true
+    },
+    skipEmptyFilesOutput: {
+      src: "test/fixtures",
+      dest: "noEmptyOptionOutput",
+      skipEmpty: true
+    },
+    partialFormatConfiguration: {
+      src: "test/fixtures",
+      dest: [
+        {"js": "partialOutputFolder/js_output"},
+        {"txt": "partialOutputFolder/txt_output"}
+      ]
+    },
+    multipleSourceFolders: {
+      src: [
+        "test/fixtures/code/",
+        "test/fixtures/js/"
+      ],
+      dest: "multipleSourcesOutput"
+    },
+    renameAndMinifyMultipleSourcesTarget: {
+      src: [
+        "test/fixtures/code/other",
+        "test/fixtures/js/"
+      ],
+      dest: [
+        {"js": "renameTaskFolder/js_output"},
+        {"css": "renameTaskFolder/css_output"},
+        {"txt": "renameTaskFolder/txt_output"}
+      ],
+      // Makes custom destinatio folder at runtime
+      rename: function(dest, src) {
+        return "renameTaskFolder/" + path.basename(src[0]).split(".")[0] + "/" + path.basename(src[0]);
+      },
+      minify: true
     }
+  },
+  nodeunit: {
+    test: ['test/*_test.js']
+  },
+  watch: {
+    scripts: {
+      files:  ['Gruntfile.js', 'tasks/*.js', 'test/*.js'],
+      tasks: ['default']
+    }
+  },
+  conventionalChangelog: {
+    options: {
+      changelogOpts: {
+        preset: 'jshint',
+        releaseCount: 0,
+        transform: function(commit, cb) {
+          if (typeof commit.gitTags === 'string') {
+            var rtag = /tag:\s*[v=]?(.+?)[,\)]/gi;
+            var match = rtag.exec(commit.gitTags);
+            rtag.lastIndex = 0;
+
+            if (match) {
+              commit.version = match[1];
+            }
+          }
+
+          commit.shortDesc += " [" + commit.hash.slice(0, 7) +
+          "](https://github.com/the-software-factory/grunt-components-concat/commit/" + commit.hash + ")";
+          delete commit.hash;
+
+          cb(null, commit);
+        }
+      }
+    },
+    release: {
+      src: 'CHANGELOG.md'
+    }
+  }
 });
 
 // Actually load this plugin's task(s).
@@ -115,30 +132,30 @@ grunt.loadNpmTasks('grunt-contrib-watch');
 grunt.loadNpmTasks('grunt-conventional-changelog');
 
 grunt.registerTask("emptyTheChangelog", function() {
-    fs.truncateSync(grunt.config.get("conventionalChangelog.release.src"), 0);
+  fs.truncateSync(grunt.config.get("conventionalChangelog.release.src"), 0);
 });
 
 grunt.registerTask("changelogCommit", function() {
-    var done = this.async();
+  var done = this.async();
 
-    var gitAdder = exec('git add CHANGELOG.md');
+  var gitAdder = exec('git add CHANGELOG.md');
 
-    gitAdder.on("exit", function(exitCode) {
-        if (exitCode !== 0) {
-            grunt.fail.fatal("changelogCommit task couldn't exec git add command");
-        }
+  gitAdder.on("exit", function(exitCode) {
+    if (exitCode !== 0) {
+      grunt.fail.fatal("changelogCommit task couldn't exec git add command");
+    }
 
-        var gitCommitter = exec('git commit -m "CHANGELOG.md Updated"');
+    var gitCommitter = exec('git commit -m "CHANGELOG.md Updated"');
 
-        gitCommitter.on("exit", function(exitCode) {
-            if (exitCode !== 0) {
-                grunt.fail.fatal("changelogCommit task couldn't exec git commit command");
-            }
+    gitCommitter.on("exit", function(exitCode) {
+      if (exitCode !== 0) {
+        grunt.fail.fatal("changelogCommit task couldn't exec git commit command");
+      }
 
-            grunt.log.ok("Changelog commit is ready");
-            done();
-        });
+      grunt.log.ok("Changelog commit is ready");
+      done();
     });
+  });
 });
 
 grunt.registerTask("default", "jshint");
