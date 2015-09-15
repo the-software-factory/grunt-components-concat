@@ -8,10 +8,17 @@ module.exports = function(grunt) {
 
     grunt.registerTask("removeEmptyMinifiedFiles", function() {
         minifiedFiles.forEach(function(file) {
-            if(fs.statSync(file).size === 0) {
-                grunt.file.delete(file, { force: true });
-                grunt.log.ok("Empty minified file " + file + " was removed");
+            var absolutePath = path.resolve("./" + file);
+
+            // If the output file were not created the exception will be fired on fs.statSync()
+            try {
+                if(fs.statSync(absolutePath).isFile() && fs.statSync(absolutePath).size === 0) {
+                    grunt.file.delete(file, { force: true });
+                    grunt.log.ok("Empty minified file " + file + " was removed");
+                }
             }
+            // Do nothing if the file were not created
+            catch(exception) {}
         });
     });
 
