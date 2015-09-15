@@ -23,19 +23,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerMultiTask('same_filename_concat', 'Concatenates files with the same name', function () {
-        // The directory of the main Gruntfile
-        var gruntCwd = process.cwd();
-        // The directory of the components_concat task script
-        var pluginFolder = __dirname.substr(0, __dirname.length - 6);
-        // Tells if components_concat is used a plugin or is used by its main Gruntfile
-        var isPlugin = gruntCwd !== pluginFolder;
-
-        // Checks if components_concat is used like a Grunt plugin; if so temporarily changes the CWD
-        // in order to load components_concat dependencies
-        if(isPlugin) {
-            process.chdir(gruntCwd + "/node_modules/grunt-same-filename-concat/");
-        }
-
         // Loads Grunt plugins used for cancatenation and minification
         grunt.loadNpmTasks("grunt-contrib-concat");
         grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -43,11 +30,6 @@ module.exports = function(grunt) {
         // Needed to suppress the logging of the task headers if no debugging messages are requires
 
         require('grunt-log-headers')(grunt);
-
-        // Restore the CWD of the main Grunt process
-        if (isPlugin) {
-            process.chdir(gruntCwd);
-        }
 
         // Gets configuration properties
         var _srcFolder = this.data.src;
