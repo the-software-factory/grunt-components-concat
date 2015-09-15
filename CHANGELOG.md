@@ -1,10 +1,12 @@
-<a name="0.12.0"></a>
-# [0.12.0](//compare/0.12.0...v0.12.0) (2015-09-08)
+<a name="0.13.0"></a>
+# [0.13.0](//compare/0.12.0...v0.13.0) (2015-09-15)
 
 
 ### Bug Fixes
 
 * Changelog hashes are now clickable links to respective GitHub pages [6bbc901](https://github.com/the-software-factory/grunt-components-concat/commit/6bbc9015d77b527af5b35e45c4fcb7438feb138b) 
+* Fix the non-existent minified files deletion [101ddf6](https://github.com/the-software-factory/grunt-components-concat/commit/101ddf61869d8e4281fee21e2f87e553c537a630) 
+* Fix the plugin's dependencies loading path [72881f9](https://github.com/the-software-factory/grunt-components-concat/commit/72881f937763a9af6d114cc15523ee7b16840c92) 
 
 ### Features
 
