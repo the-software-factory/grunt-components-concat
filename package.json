@@ -14,6 +14,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "dir-compare": "0.0.2",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-uglify": "^0.9.1",
