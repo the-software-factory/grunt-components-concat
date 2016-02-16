@@ -1,6 +1,10 @@
-<a name="0.13.1"></a>
-## [0.13.1](//compare/0.13.1...v0.13.1) (2016-01-24)
+<a name="0.13.2"></a>
+## [0.13.2](//compare/0.13.1...v0.13.2) (2016-02-16)
 
+
+### Bug Fixes
+
+* grunt-log-headers is no longer used [e933569](https://github.com/the-software-factory/grunt-components-concat/commit/e93356952a854a9521441e2e40740b85f953bbe0) 
 
 
 
