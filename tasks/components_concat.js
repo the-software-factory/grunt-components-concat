@@ -30,7 +30,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     // Needed to suppress the logging of the task headers if no debugging messages are requires
 
-    require('grunt-log-headers')(grunt);
+    // TODO This method introduce a bug that need to be fixed within the grunt-log-headers plugin itself.
+    //require('grunt-log-headers')(grunt);
 
     // Gets configuration properties
     var _srcFolder = this.data.src;
