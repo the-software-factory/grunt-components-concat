@@ -67,8 +67,6 @@ module.exports = function(grunt) {
       inexistentSources.forEach(function(folder) {
         grunt.log.error("The source folder '" + folder + "' doesn't exist");
       });
-
-      grunt.fail.fatal("can't run the task due to a fatal error");
     }
 
 
