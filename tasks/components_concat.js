@@ -64,9 +64,7 @@ module.exports = function(grunt) {
     });
 
     if (inexistentSources.length !== 0) {
-      inexistentSources.forEach(function(folder) {
-        return;
-      });
+      return;
     }
 
 

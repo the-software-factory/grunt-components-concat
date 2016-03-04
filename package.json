@@ -1,7 +1,7 @@
 {
   "name": "grunt-same-filename-concat",
   "description": "Concatenates files with the same name",
-  "version": "0.13.4",
+  "version": "0.13.5",
   "author": {
     "name": "Andrea Stronati",
     "email": "astronati@vendini.com"
