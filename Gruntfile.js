@@ -58,6 +58,13 @@ module.exports = function(grunt) {
         {"txt": "partialOutputFolder/txt_output"}
       ]
     },
+    emptySrcFiles: {
+      src: "test/empty",
+      dest: [
+        {"js": "empty/js_output"},
+        {"txt": "empty/txt_output"}
+      ]
+    },
     multipleSourceFolders: {
       src: [
         "test/fixtures/code/",

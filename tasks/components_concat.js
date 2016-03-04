@@ -65,7 +65,7 @@ module.exports = function(grunt) {
 
     if (inexistentSources.length !== 0) {
       inexistentSources.forEach(function(folder) {
-        grunt.log.error("The source folder '" + folder + "' doesn't exist");
+        return;
       });
     }
 
