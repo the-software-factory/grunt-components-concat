@@ -204,8 +204,9 @@ module.exports = function(grunt) {
       for (var sameNameFiles in _filesByExtension[fileext]) {
 
         var filename = path.basename(_filesByExtension[fileext][sameNameFiles][0]);
-        var filenameUnderscore = filename.replace(".", "_");
-        var fileExtension = filename.split(".")[1];
+        var filenameUnderscore = filename.replace(/\./g, "_");
+        var fileParts = filename.split(".");
+        var fileExtension = fileParts[fileParts.length - 1];
 
         // Relative path to the output folder
         var destFolder = null;
