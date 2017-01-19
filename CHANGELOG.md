@@ -1,5 +1,51 @@
+<a name="0.13.6"></a>
+## [0.13.6](//compare/0.13.6...v0.13.6) (2017-01-19)
+
+
+
+
+<a name="0.13.6"></a>
+## [0.13.6](//compare/0.13.5...0.13.6) (2017-01-19 12:12:25 +0100)
+
+
+### Bug Fixes
+
+* Fixed extension and middle name for files [45a93aa](https://github.com/the-software-factory/grunt-components-concat/commit/45a93aa81329034d0a3934667969825e62f7fa6e) 
+
+
+
+<a name="0.13.5"></a>
+## [0.13.5](//compare/0.13.4...0.13.5) (2016-03-04 14:19:24 +0100)
+
+
+### Bug Fixes
+
+* Removed foreach when no file is in the source folder [18f4f6f](https://github.com/the-software-factory/grunt-components-concat/commit/18f4f6f8f961c9b6eef26896174af9bdcebcde3c) 
+
+
+
+<a name="0.13.4"></a>
+## [0.13.4](//compare/0.13.3...0.13.4) (2016-03-04 13:04:44 +0100)
+
+
+### Bug Fixes
+
+* Updated tasks folder and Gruntfile to support empty source folder [24d9cad](https://github.com/the-software-factory/grunt-components-concat/commit/24d9cad8dff89cc5d595adb88ee2bd6b6b493373) 
+
+
+
+<a name="0.13.3"></a>
+## [0.13.3](//compare/0.13.2...0.13.3) (2016-03-04 12:54:54 +0100)
+
+
+### Bug Fixes
+
+* Removed fatal error [0b2a7fc](https://github.com/the-software-factory/grunt-components-concat/commit/0b2a7fc1a5f6e4acbb58486cb6fe0e145ad2e1fe) 
+
+
+
 <a name="0.13.2"></a>
-## [0.13.2](//compare/0.13.1...v0.13.2) (2016-02-16)
+## [0.13.2](//compare/0.13.1...0.13.2) (2016-02-16 16:21:06 +0100)
 
 
 ### Bug Fixes
